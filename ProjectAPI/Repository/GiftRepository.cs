@@ -5,9 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ProjectAPI.Repository
 {
-    public class GiftRepository
+    public class GiftRepository : IGiftRepository
     {
-        LotteryContext context = LotteryContextFactory.CreateContext();
+        private readonly LotteryContext context;
+
+        public GiftRepository(LotteryContext _context)
+        {
+            context = _context; 
+        }
 
         public async Task<Gifts> CreateGift(Gifts gift)
         {
@@ -18,22 +23,26 @@ namespace ProjectAPI.Repository
 
         public async Task<List<Gifts>> GetAllGifts()
         {
-            var listGifts = await context.Gifts.Select(x => x).ToListAsync();
+            var listGifts = await context.Gifts.
+                Include(c => c.IdCatgory).
+                Include(c => c.IdDonor).
+                ToListAsync();
+
             return listGifts;
         }
 
         public async Task<Gifts?> GetGiftsByID(int id)
         {
-            var gift = await context.Gifts.FindAsync(id);
-            if (gift == null)
-                return null;
+            var gift = await context.Gifts.
+                FirstOrDefaultAsync(c => c.Id == id);
+          
 
             return gift;
         }
 
-        public async Task<Gifts?> UpdateGifts(Gifts gift, int id)
+        public async Task<Gifts?> UpdateGifts(Gifts gift)
         {
-            var existingGift = await context.Gifts.FindAsync(id);
+            var existingGift = await context.Gifts.FindAsync(gift.Id);
             if (existingGift == null)
                 return null;
 
@@ -56,6 +65,12 @@ namespace ProjectAPI.Repository
             context.Gifts.Remove(existingGift);
             await context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<Gifts?> FindGiftByName(string name)
+        {
+            var foundGift = await context.Gifts.FirstOrDefaultAsync(g => g.Name == name);
+            return  foundGift;
         }
     }
 }

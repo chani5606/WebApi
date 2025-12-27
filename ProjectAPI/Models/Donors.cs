@@ -9,6 +9,9 @@
         public string Email { get; set; }
 
         public List<Gifts> Gifts { get; set; }  = new List<Gifts>();
+         
+        public Adress Adress { get; set; }
+
 
     }
 }

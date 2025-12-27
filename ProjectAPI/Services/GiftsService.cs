@@ -1,24 +1,21 @@
 ﻿using ProjectAPI.Dto;
+using ProjectAPI.Interfaces;
 using ProjectAPI.Models;
 using ProjectAPI.Repository;
 
 namespace ProjectAPI.Services
 {
-    public class GiftsService
+    public class GiftsService:IGiftsServices
     {
-        private readonly GiftRepository giftRepository = new();
+        private readonly IGiftRepository giftRepository ;
 
-        public async Task<Gifts> CreateGift(GiftCreateDto dto)
+        public GiftsService(IGiftRepository _giftRepository)
         {
-            var gift = new Gifts
-            {
-                Name = dto.Name,
-                GiftNumber = dto.GiftNumber,
-                IdDonor = dto.IdDonor,
-                IdCatgory = dto.IdCatgory,
-                Price = dto.Price,
-                PathImage = dto.PathImage
-            };
+            giftRepository = _giftRepository;
+        }
+        public async Task<Gifts> CreateGift(GiftCreateDTOs dtodto)
+        {
+            
 
             return await giftRepository.CreateGift(gift);
         }
@@ -33,7 +30,7 @@ namespace ProjectAPI.Services
             return await giftRepository.GetGiftsByID(id);
         }
 
-        public async Task<Gifts> UpdateGifts(GiftCreateDto dto, int id)
+        public async Task<Gifts> UpdateGifts(GiftCDTOs dto, int id)
         {
             var gift = new Gifts
             {

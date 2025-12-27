@@ -7,11 +7,9 @@ namespace ProjectAPI.Models
         public int Id { get; set; }
 
         public int IdPurchaser { get; set; }
-        [ForeignKey("IdPurchaser")]
         public Purchasers Purchaser { get; set; }
         public int IdGifts { get; set; }
 
-        [ForeignKey("IdGifts")]
         public Gifts Gifts { get; set; }
 
 

@@ -13,7 +13,7 @@ namespace ProjectAPI.Controllers
 
         [HttpPost]
         [Route("CreateGifts")]
-        public async Task<IActionResult> CreateGift([FromBody] GiftCreateDto gift)
+        public async Task<IActionResult> CreateGift([FromBody] GiftCDTOs gift)
         {
             var res = await _service.CreateGift(gift);
             return Ok(res);
@@ -37,7 +37,7 @@ namespace ProjectAPI.Controllers
 
         [HttpPut]
         [Route("UpdateGift")]
-        public async Task<IActionResult> UpdateGift([FromBody] GiftCreateDto gift, int id)
+        public async Task<IActionResult> UpdateGift([FromBody] GiftCDTOs gift, int id)
         {
             var res = await _service.UpdateGifts(gift, id);
             return Ok(res);
