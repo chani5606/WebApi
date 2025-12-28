@@ -10,8 +10,7 @@ namespace ProjectAPI.Models
        public string Phone { get;set; }
        public string Email { get; set; }
        public Adress Adress { get; set; }
-
-        //public List<Basket> Gifts { get; set; } = new List<Basket>();
+        public List<Basket> Gifts { get; set; } = new List<Basket>();
 
     }
 }
