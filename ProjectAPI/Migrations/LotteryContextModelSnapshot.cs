@@ -60,17 +60,15 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdGifts")
+                    b.Property<int>("GiftsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdPurchaser")
+                    b.Property<int>("PurchasersId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdGifts");
-
-                    b.HasIndex("IdPurchaser");
+                    b.HasIndex("GiftsId");
 
                     b.ToTable("Basket");
                 });
@@ -100,6 +98,9 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AdressId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -114,6 +115,8 @@ namespace ProjectAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AdressId");
+
                     b.ToTable("Donors");
                 });
 
@@ -125,13 +128,13 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CatgoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DonorId")
+                        .HasColumnType("int");
+
                     b.Property<int>("GiftNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCatgory")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdDonor")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -147,9 +150,9 @@ namespace ProjectAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdCatgory");
+                    b.HasIndex("CatgoryId");
 
-                    b.HasIndex("IdDonor");
+                    b.HasIndex("DonorId");
 
                     b.ToTable("Gifts");
                 });
@@ -192,32 +195,35 @@ namespace ProjectAPI.Migrations
                 {
                     b.HasOne("ProjectAPI.Models.Gifts", "Gifts")
                         .WithMany()
-                        .HasForeignKey("IdGifts")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ProjectAPI.Models.Purchasers", "Purchaser")
-                        .WithMany()
-                        .HasForeignKey("IdPurchaser")
+                        .HasForeignKey("GiftsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Gifts");
+                });
 
-                    b.Navigation("Purchaser");
+            modelBuilder.Entity("ProjectAPI.Models.Donors", b =>
+                {
+                    b.HasOne("ProjectAPI.Models.Adress", "Adress")
+                        .WithMany()
+                        .HasForeignKey("AdressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Adress");
                 });
 
             modelBuilder.Entity("ProjectAPI.Models.Gifts", b =>
                 {
                     b.HasOne("ProjectAPI.Models.Catgories", "Catgory")
                         .WithMany()
-                        .HasForeignKey("IdCatgory")
+                        .HasForeignKey("CatgoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectAPI.Models.Donors", "Donor")
-                        .WithMany()
-                        .HasForeignKey("IdDonor")
+                        .WithMany("Gifts")
+                        .HasForeignKey("DonorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -235,6 +241,11 @@ namespace ProjectAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Adress");
+                });
+
+            modelBuilder.Entity("ProjectAPI.Models.Donors", b =>
+                {
+                    b.Navigation("Gifts");
                 });
 #pragma warning restore 612, 618
         }

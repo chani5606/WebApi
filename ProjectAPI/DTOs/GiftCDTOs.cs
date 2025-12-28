@@ -12,7 +12,7 @@ namespace ProjectAPI.Dto
             public int IdDonor { get; set; }      
             public int IdCatgory { get; set; }
            [Required]
-           [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")
+           [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
            public int Price { get; set; }
            public string PathImage { get; set; }
     }
@@ -23,7 +23,7 @@ namespace ProjectAPI.Dto
         public int GiftNumber { get; set; }
         public int IdDonor { get; set; }
         public int IdCatgory { get; set; }
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")
+        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public int Price { get; set; }
         public string PathImage { get; set; }
     }

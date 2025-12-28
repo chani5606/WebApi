@@ -9,8 +9,8 @@ namespace ProjectAPI.Interfaces
         Task<GifttResponseDTOs> CreateGift(GiftCreateDTOs dto);
         Task<List<GifttResponseDTOs>> GetAllGifts();
         Task<GifttResponseDTOs?> GetGiftsByID(int id);
-        Task<GiftUpdateDTOs?> UpdateGifts(GiftUpdateDTOs gift);
+        Task<GifttResponseDTOs?> UpdateGifts(GiftUpdateDTOs dto, int id);
         Task<bool> DeleteGifts(int id);
-        Task<GifttResponseDTOs?> FindGiftByEmail(string email);
+        Task<GifttResponseDTOs?> FindGiftByname(string name);
     }
 }
