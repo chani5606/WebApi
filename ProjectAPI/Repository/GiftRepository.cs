@@ -24,8 +24,8 @@ namespace ProjectAPI.Repository
         public async Task<List<Gifts>> GetAllGifts()
         {
             var listGifts = await context.Gifts.
-                Include(c => c.IdCatgory).
-                Include(c => c.IdDonor).
+                Include(c => c.Catgory).
+                Include(c => c.Donor).
                 ToListAsync();
 
             return listGifts;
@@ -47,8 +47,8 @@ namespace ProjectAPI.Repository
                 return null;
 
             existingGift.Name = gift.Name;
-            existingGift.IdDonor = gift.IdDonor;
-            existingGift.IdCatgory = gift.IdCatgory;
+            existingGift.DonorId = gift.DonorId;
+            existingGift.CatgoryId = gift.CatgoryId;
             existingGift.Price = gift.Price;
             existingGift.GiftNumber = gift.GiftNumber;
 

@@ -11,8 +11,8 @@ using ProjectAPI.Data;
 namespace ProjectAPI.Migrations
 {
     [DbContext(typeof(LotteryContext))]
-    [Migration("20251221113305_InitialCreate43")]
-    partial class InitialCreate43
+    [Migration("20251228174604_InitialCreate98")]
+    partial class InitialCreate98
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,17 +63,15 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdGiftsId")
+                    b.Property<int>("GiftsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdPurchaserId")
+                    b.Property<int>("PurchasersId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdGiftsId");
-
-                    b.HasIndex("IdPurchaserId");
+                    b.HasIndex("GiftsId");
 
                     b.ToTable("Basket");
                 });
@@ -103,6 +101,9 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("AdressId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -116,6 +117,8 @@ namespace ProjectAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AdressId");
 
                     b.ToTable("Donors");
                 });
@@ -138,6 +141,10 @@ namespace ProjectAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PathImage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -189,21 +196,24 @@ namespace ProjectAPI.Migrations
 
             modelBuilder.Entity("ProjectAPI.Models.Basket", b =>
                 {
-                    b.HasOne("ProjectAPI.Models.Gifts", "IdGifts")
+                    b.HasOne("ProjectAPI.Models.Gifts", "Gifts")
                         .WithMany()
-                        .HasForeignKey("IdGiftsId")
+                        .HasForeignKey("GiftsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjectAPI.Models.Purchasers", "IdPurchaser")
+                    b.Navigation("Gifts");
+                });
+
+            modelBuilder.Entity("ProjectAPI.Models.Donors", b =>
+                {
+                    b.HasOne("ProjectAPI.Models.Adress", "Adress")
                         .WithMany()
-                        .HasForeignKey("IdPurchaserId")
+                        .HasForeignKey("AdressId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdGifts");
-
-                    b.Navigation("IdPurchaser");
+                    b.Navigation("Adress");
                 });
 
             modelBuilder.Entity("ProjectAPI.Models.Gifts", b =>
@@ -215,7 +225,7 @@ namespace ProjectAPI.Migrations
                         .IsRequired();
 
                     b.HasOne("ProjectAPI.Models.Donors", "Donor")
-                        .WithMany()
+                        .WithMany("Gifts")
                         .HasForeignKey("DonorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -234,6 +244,11 @@ namespace ProjectAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Adress");
+                });
+
+            modelBuilder.Entity("ProjectAPI.Models.Donors", b =>
+                {
+                    b.Navigation("Gifts");
                 });
 #pragma warning restore 612, 618
         }

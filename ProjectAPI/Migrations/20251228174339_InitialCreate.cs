@@ -5,7 +5,7 @@
 namespace ProjectAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate3 : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,11 +48,18 @@ namespace ProjectAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdressId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Donors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Donors_Adress_AdressId",
+                        column: x => x.AdressId,
+                        principalTable: "Adress",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,9 +93,10 @@ namespace ProjectAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GiftNumber = table.Column<int>(type: "int", nullable: false),
-                    DonorId = table.Column<int>(type: "int", nullable: false),
                     CatgoryId = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<int>(type: "int", nullable: false)
+                    DonorId = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    PathImage = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -113,35 +121,29 @@ namespace ProjectAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdPurchaserId = table.Column<int>(type: "int", nullable: false),
-                    IdGiftsId = table.Column<int>(type: "int", nullable: false)
+                    PurchasersId = table.Column<int>(type: "int", nullable: false),
+                    GiftsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Basket", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Basket_Gifts_IdGiftsId",
-                        column: x => x.IdGiftsId,
+                        name: "FK_Basket_Gifts_GiftsId",
+                        column: x => x.GiftsId,
                         principalTable: "Gifts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Basket_Purchasers_IdPurchaserId",
-                        column: x => x.IdPurchaserId,
-                        principalTable: "Purchasers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Basket_IdGiftsId",
+                name: "IX_Basket_GiftsId",
                 table: "Basket",
-                column: "IdGiftsId");
+                column: "GiftsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Basket_IdPurchaserId",
-                table: "Basket",
-                column: "IdPurchaserId");
+                name: "IX_Donors_AdressId",
+                table: "Donors",
+                column: "AdressId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Gifts_CatgoryId",
@@ -166,10 +168,10 @@ namespace ProjectAPI.Migrations
                 name: "Basket");
 
             migrationBuilder.DropTable(
-                name: "Gifts");
+                name: "Purchasers");
 
             migrationBuilder.DropTable(
-                name: "Purchasers");
+                name: "Gifts");
 
             migrationBuilder.DropTable(
                 name: "Categories");

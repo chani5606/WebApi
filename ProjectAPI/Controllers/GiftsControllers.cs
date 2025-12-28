@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectAPI.Dto;
+using ProjectAPI.Interfaces;
 using ProjectAPI.Models;
+using ProjectAPI.Repository;
 using ProjectAPI.Services;
 
 namespace ProjectAPI.Controllers
@@ -9,11 +11,16 @@ namespace ProjectAPI.Controllers
     [ApiController]
     public class GiftsControllers : ControllerBase
     {
-        private readonly GiftsService _service = new();
+        private readonly IGiftsServices _service;
+
+        public GiftsControllers(IGiftsServices service)
+        {
+            _service = service;
+        }
 
         [HttpPost]
         [Route("CreateGifts")]
-        public async Task<IActionResult> CreateGift([FromBody] GiftCDTOs gift)
+        public async Task<ActionResult<GifttResponseDTOs>> CreateGift([FromBody] GiftCreateDTOs gift)
         {
             var res = await _service.CreateGift(gift);
             return Ok(res);
@@ -21,31 +28,32 @@ namespace ProjectAPI.Controllers
 
         [HttpGet]
         [Route("GetAllGifts")]
-        public async Task<IActionResult> GetAllGifts()
+        public async Task<ActionResult<List<GifttResponseDTOs>>> GetAllGifts()
         {
             var res = await _service.GetAllGifts();
             return Ok(res);
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         [Route("GetGiftsByID")]
-        public async Task<IActionResult> GetGiftsByID(int id)
+        public async Task<ActionResult<GifttResponseDTOs>> GetGiftsByID(int id)
         {
             var res = await _service.GetGiftsByID(id);
+            if (res == null) return NotFound();
             return Ok(res);
         }
 
-        [HttpPut]
+        [HttpPut("{id}")]
         [Route("UpdateGift")]
-        public async Task<IActionResult> UpdateGift([FromBody] GiftCDTOs gift, int id)
+        public async Task<ActionResult<GifttResponseDTOs>> UpdateGift([FromBody] GiftUpdateDTOs gift, int id)
         {
-            var res = await _service.UpdateGifts(gift, id);
+            var res = await _service.UpdateGifts(gift,id);
             return Ok(res);
         }
 
         [HttpDelete]
         [Route("DeleteGift")]
-        public async Task<IActionResult> DeleteGift(int id)
+        public async Task<ActionResult<bool>> DeleteGift(int id)
         {
             var res = await _service.DeleteGifts(id);
             return Ok(res);

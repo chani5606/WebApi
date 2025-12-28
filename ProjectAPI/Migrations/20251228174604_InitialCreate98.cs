@@ -5,7 +5,7 @@
 namespace ProjectAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate43 : Migration
+    public partial class InitialCreate98 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

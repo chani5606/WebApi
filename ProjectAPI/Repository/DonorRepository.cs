@@ -8,7 +8,7 @@ namespace ProjectAPI.Repository
     public class DonorRepository
     {
 
-        LotteryContext context = LotteryContextFactory.CreateContext();
+        LotteryContext context;
 
         public async Task<bool> CreateDonor(Donors d)
 
