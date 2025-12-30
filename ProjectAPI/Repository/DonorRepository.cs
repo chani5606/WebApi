@@ -2,49 +2,58 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectAPI.Data;
 using ProjectAPI.Models;
+using ProjectFinal.Dto;
+using ProjectFinal.Interfaces;
 
 namespace ProjectAPI.Repository
 {
-    public class DonorRepository
+    public class DonorRepository:IDonorRepository
     {
 
         LotteryContext context;
 
-        public async Task<bool> CreateDonor(Donors d)
+        public DonorRepository(LotteryContext _context)
+        {
+            context = _context;
+        }
+
+        public async Task<Donors?> CreateDonor(Donors d)
 
         {
-            bool  existingDonor = context.Donors.Any(a => d.Phone == a.Phone);
-            if (existingDonor)
-                return false;
             await context.Donors.AddAsync(d);
             await context.SaveChangesAsync();
-            return true;
+            return d;
         }
-        public async Task<List<Donors>> GetAllDonors()
+        public async Task<List<Donors?>> GetAllDonors()
         {
-            var listDonors = await context.Donors.Select(x => x).ToListAsync();
+            var listDonors = await context.Donors.
+                Include(c => c.Gifts).
+                ToListAsync();
             return listDonors;
         }
 
-        public async Task< Donors> GetDonorsByID(int id)
+        public async Task<Donors?> GetDonorById(int id)
         {
-            var donor = await context.Donors.FindAsync(id);
-            if (donor == null)
-                return null;
+            var donor = await context.Donors.FirstOrDefaultAsync(c => c.Id == id);
 
             return donor;
         }
 
-        public async Task<Donors> UpdateDonor(Donors d, int id)
+        public async Task<Donors?> UpdateDonor(Donors d)
         {
-            var existingDonor = await context.Donors.FindAsync(id);
+            var existingDonor = await context.Donors.FindAsync(d.Id);
             if (existingDonor == null)
                 return null;
             existingDonor.Name = d.Name;
             existingDonor.Email = d.Email;
             existingDonor.Phone = d.Phone;
-        
-           await  context.SaveChangesAsync();
+            existingDonor.City = d.City;
+            existingDonor.Nieghbrhood = d.Nieghbrhood;
+            existingDonor.Street = d.Street;
+            existingDonor.Gifts = d.Gifts;
+
+
+            await context.SaveChangesAsync();
             return existingDonor;
         }
 
@@ -55,10 +64,19 @@ namespace ProjectAPI.Repository
                 return false;
 
             context.Donors.Remove(existingdonor);
-           await context.SaveChangesAsync();
+            await context.SaveChangesAsync();
             return true;
 
         }
 
-    }
+        public async Task<Donors?> FindDonorByGifts(int id)
+        {
+            var donor = await context.Donors
+                .Include(d => d.Gifts)
+                .FirstOrDefaultAsync( d => d.Gifts.Any(g => g.Id == id));
+
+            return donor;
+
+        }
+    }      
 }

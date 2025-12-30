@@ -51,7 +51,6 @@ namespace ProjectAPI.Services
             var existingGift = await giftRepository.GetGiftsByID(id);
             if (existingGift == null) return null;
 
-            // עדכון המתנה לפי הנתונים החדשים
             if (dto.Name != null) existingGift.Name = dto.Name;
             if (dto.GiftNumber != 0) existingGift.GiftNumber = dto.GiftNumber;
             if (dto.IdDonor != 0) existingGift.DonorId = dto.IdDonor;
@@ -81,9 +80,11 @@ namespace ProjectAPI.Services
             };
         }
 
-        public Task<GifttResponseDTOs?> FindGiftByname(string name)
+        public async Task<GifttResponseDTOs?> FindGiftByname(string name)
         {
-            throw new NotImplementedException();
+            var gift = await giftRepository.FindGiftByName(name);
+            if(gift == null) return null;  
+            return MapToDTO(gift);
         }
 
      

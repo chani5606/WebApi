@@ -11,8 +11,8 @@ using ProjectAPI.Data;
 namespace ProjectAPI.Migrations
 {
     [DbContext(typeof(LotteryContext))]
-    [Migration("20251228174604_InitialCreate98")]
-    partial class InitialCreate98
+    [Migration("20251230133355_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,37 +23,6 @@ namespace ProjectAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("ProjectAPI.Models.Adress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AppartmentNumber")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BuilderNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nieghborhood")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Adress");
-                });
 
             modelBuilder.Entity("ProjectAPI.Models.Basket", b =>
                 {
@@ -72,6 +41,8 @@ namespace ProjectAPI.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GiftsId");
+
+                    b.HasIndex("PurchasersId");
 
                     b.ToTable("Basket");
                 });
@@ -101,8 +72,9 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AdressId")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -112,13 +84,19 @@ namespace ProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Nieghbrhood")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AdressId");
+                    b.HasKey("Id");
 
                     b.ToTable("Donors");
                 });
@@ -168,8 +146,9 @@ namespace ProjectAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AdressId")
-                        .HasColumnType("int");
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -183,13 +162,19 @@ namespace ProjectAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Nieghbrhood")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("AdressId");
+                    b.HasKey("Id");
 
                     b.ToTable("Purchasers");
                 });
@@ -197,23 +182,20 @@ namespace ProjectAPI.Migrations
             modelBuilder.Entity("ProjectAPI.Models.Basket", b =>
                 {
                     b.HasOne("ProjectAPI.Models.Gifts", "Gifts")
-                        .WithMany()
+                        .WithMany("baskets")
                         .HasForeignKey("GiftsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ProjectAPI.Models.Purchasers", "Purchasers")
+                        .WithMany("Gifts")
+                        .HasForeignKey("PurchasersId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Gifts");
-                });
 
-            modelBuilder.Entity("ProjectAPI.Models.Donors", b =>
-                {
-                    b.HasOne("ProjectAPI.Models.Adress", "Adress")
-                        .WithMany()
-                        .HasForeignKey("AdressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Adress");
+                    b.Navigation("Purchasers");
                 });
 
             modelBuilder.Entity("ProjectAPI.Models.Gifts", b =>
@@ -235,18 +217,17 @@ namespace ProjectAPI.Migrations
                     b.Navigation("Donor");
                 });
 
-            modelBuilder.Entity("ProjectAPI.Models.Purchasers", b =>
+            modelBuilder.Entity("ProjectAPI.Models.Donors", b =>
                 {
-                    b.HasOne("ProjectAPI.Models.Adress", "Adress")
-                        .WithMany()
-                        .HasForeignKey("AdressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Adress");
+                    b.Navigation("Gifts");
                 });
 
-            modelBuilder.Entity("ProjectAPI.Models.Donors", b =>
+            modelBuilder.Entity("ProjectAPI.Models.Gifts", b =>
+                {
+                    b.Navigation("baskets");
+                });
+
+            modelBuilder.Entity("ProjectAPI.Models.Purchasers", b =>
                 {
                     b.Navigation("Gifts");
                 });

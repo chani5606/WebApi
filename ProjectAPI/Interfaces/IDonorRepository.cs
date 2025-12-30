@@ -1,13 +1,17 @@
-﻿using ProjectFinal.Dto;
+﻿using ProjectAPI.Models;
+using ProjectFinal.Dto;
 
 namespace ProjectFinal.Interfaces
 {
     public interface IDonorRepository
     {
-        Task<bool> CreateDonor(DonorCreateDto donor);
-        Task<List<DonorResponseDto>> GetAllDonors();
-        Task<DonorResponseDto> GetDonorById(int id);
-        Task<DonorResponseDto> UppdateDonor(DonorUpdateDto donor, int id);
-        Task<bool> DeletDonor(int id);
+        Task<Donors?> CreateDonor(Donors donor);
+        Task<List<Donors?>> GetAllDonors();
+        Task<Donors?> GetDonorById(int id);
+        Task<Donors?> UpdateDonor(Donors donor);
+        Task<bool> DeleteDonor(int id);
+
+        Task<Donors?> FindDonorByGifts(int idGifts);
+
     }
 }

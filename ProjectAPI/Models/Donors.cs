@@ -1,4 +1,6 @@
-﻿namespace ProjectAPI.Models
+﻿using System.Text.Json.Serialization;
+
+namespace ProjectAPI.Models
 {
     public class Donors
     {
@@ -7,10 +9,13 @@
 
         public string Phone { get; set; }
         public string Email { get; set; }
-
         public List<Gifts> Gifts { get; set; }  = new List<Gifts>();
          
-        public Adress Adress { get; set; }
+        public string City { get; set; }
+
+        public string Nieghbrhood { get; set; }
+
+        public string Street { get; set; }
 
 
     }

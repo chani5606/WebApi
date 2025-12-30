@@ -8,7 +8,7 @@ namespace ProjectAPI.Repository
         Task<List<Gifts>> GetAllGifts();
         Task<Gifts?> GetGiftsByID(int id);
         Task<Gifts?> UpdateGifts(Gifts gift);
-        Task<bool> DeleteGifts(int id);
+        Task<bool> DeleteGifts(int id); 
         Task<Gifts?> FindGiftByName(string name);
     }
 }

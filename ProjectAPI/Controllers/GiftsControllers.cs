@@ -34,8 +34,7 @@ namespace ProjectAPI.Controllers
             return Ok(res);
         }
 
-        [HttpGet("{id}")]
-        [Route("GetGiftsByID")]
+        [HttpGet("GetGiftsByID/{id}")]
         public async Task<ActionResult<GifttResponseDTOs>> GetGiftsByID(int id)
         {
             var res = await _service.GetGiftsByID(id);
@@ -43,8 +42,7 @@ namespace ProjectAPI.Controllers
             return Ok(res);
         }
 
-        [HttpPut("{id}")]
-        [Route("UpdateGift")]
+        [HttpPut("UpdateGift/{id}")]
         public async Task<ActionResult<GifttResponseDTOs>> UpdateGift([FromBody] GiftUpdateDTOs gift, int id)
         {
             var res = await _service.UpdateGifts(gift,id);
@@ -58,5 +56,15 @@ namespace ProjectAPI.Controllers
             var res = await _service.DeleteGifts(id);
             return Ok(res);
         }
+
+        [HttpGet]
+        [Route("FindGiftByname")]
+        public async Task<ActionResult<GifttResponseDTOs>> FindGiftByname(string name)
+        {
+            var res = await _service.FindGiftByname(name);
+            return Ok(res);
+        }
+
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ProjectAPI.Models
 {
@@ -9,7 +10,12 @@ namespace ProjectAPI.Models
        public string LastName { get; set; }
        public string Phone { get;set; }
        public string Email { get; set; }
-       public Adress Adress { get; set; }
+        public string City { get; set; }
+
+        public string Nieghbrhood { get; set; }
+
+        public string Street { get; set; }
+       
         public List<Basket> Gifts { get; set; } = new List<Basket>();
 
     }
