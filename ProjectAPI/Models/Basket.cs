@@ -6,11 +6,12 @@ namespace ProjectAPI.Models
     {
         public int Id { get; set; }
 
-        public int PurchasersId { get; set; }
-        public Purchasers Purchasers { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
         public int GiftsId { get; set; }
 
         public Gifts Gifts { get; set; }
+        public int Status { get; set; } = 0;
 
 
 

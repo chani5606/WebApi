@@ -12,5 +12,6 @@ namespace ProjectAPI.Interfaces
         Task<GifttResponseDTOs?> UpdateGifts(GiftUpdateDTOs dto, int id);
         Task<bool> DeleteGifts(int id);
         Task<GifttResponseDTOs?> FindGiftByname(string name);
+        Task<List<GifttResponseDTOs?>> FindGiftByDonor(string d);
     }
 }

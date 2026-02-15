@@ -17,8 +17,16 @@ namespace ProjectAPI.Repository
         public async Task<Gifts> CreateGift(Gifts gift)
         {
             context.Gifts.Add(gift);
-            await context.SaveChangesAsync();
-            return gift;
+            try
+            {
+                await context.SaveChangesAsync();
+                return gift;
+            }
+            catch (DbUpdateException ex)
+            {
+                var msg = ex.InnerException?.Message;
+                throw new Exception(msg);
+            }
         }
 
         public async Task<List<Gifts>> GetAllGifts()
@@ -33,16 +41,21 @@ namespace ProjectAPI.Repository
 
         public async Task<Gifts?> GetGiftsByID(int id)
         {
-            var gift = await context.Gifts.
-                FirstOrDefaultAsync(c => c.Id == id);
-          
+           var g = context.Gifts
+        .Include(g => g.baskets)
+            .ThenInclude(b => b.User)
+        .SingleOrDefaultAsync(g => g.Id == id);
 
-            return gift;
+            return await g;
+
+
         }
-
+        //שיניתי
         public async Task<Gifts?> UpdateGifts(Gifts gift)
         {
-            var existingGift = await context.Gifts.FindAsync(gift.Id);
+            var existingGift = await context.Gifts
+                .FirstOrDefaultAsync(g => g.Id == gift.Id);
+
             if (existingGift == null)
                 return null;
 
@@ -53,8 +66,13 @@ namespace ProjectAPI.Repository
             existingGift.GiftNumber = gift.GiftNumber;
 
             await context.SaveChangesAsync();
-            return existingGift;
+
+            return await context.Gifts
+                .Include(g => g.Catgory)
+                .Include(g => g.Donor)
+                .FirstOrDefaultAsync(g => g.Id == gift.Id);
         }
+
 
         public async Task<bool> DeleteGifts(int id)
         {
@@ -72,5 +90,25 @@ namespace ProjectAPI.Repository
             var foundGift = await context.Gifts.FirstOrDefaultAsync(g => g.Name == name);
             return  foundGift;
         }
+        public async Task<List<Gifts>> FindGiftByDonor(string d)
+        {
+            var foundGifts = await context.Gifts
+                .Where(g => g.Donor.Name == d)
+                .ToListAsync();
+            if (foundGifts == null || foundGifts.Count == 0)
+            {
+                return new List<Gifts>();
+            }
+            return foundGifts;
+        }
+
+        public async Task<List<Gifts>> GetGiftsWithUser()
+        {
+            var gifts = await context.Gifts
+                .Include(u =>  u.baskets)
+                .ToListAsync();
+            return gifts;
+        }
+
     }
 }

@@ -3,11 +3,12 @@ using System.Text.Json.Serialization;
 
 namespace ProjectAPI.Models
 {
-    public class Purchasers
+    public class User
     {
        public int Id { get; set; }
-       public string FisrtName { get; set; }
+       public string FirstName { get; set; }
        public string LastName { get; set; }
+        public string Password { get; set; }
        public string Phone { get;set; }
        public string Email { get; set; }
         public string City { get; set; }
@@ -15,7 +16,9 @@ namespace ProjectAPI.Models
         public string Nieghbrhood { get; set; }
 
         public string Street { get; set; }
-       
+
+        public string Role { get; set; } = "User";
+
         public List<Basket> Gifts { get; set; } = new List<Basket>();
 
     }

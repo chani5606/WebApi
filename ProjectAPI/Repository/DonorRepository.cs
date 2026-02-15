@@ -7,7 +7,7 @@ using ProjectFinal.Interfaces;
 
 namespace ProjectAPI.Repository
 {
-    public class DonorRepository:IDonorRepository
+    public class DonorRepository : IDonorRepository
     {
 
         LotteryContext context;
@@ -73,10 +73,11 @@ namespace ProjectAPI.Repository
         {
             var donor = await context.Donors
                 .Include(d => d.Gifts)
-                .FirstOrDefaultAsync( d => d.Gifts.Any(g => g.Id == id));
+                .FirstOrDefaultAsync(d => d.Gifts.Any(g => g.Id == id));
 
             return donor;
 
         }
-    }      
+  
+    }
 }
