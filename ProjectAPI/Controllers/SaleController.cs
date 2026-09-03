@@ -44,7 +44,6 @@ namespace ProjectAPI.Controllers
             return Ok(await _saleServices.IsSaleOpen());
 
         }
-        //[Authorize(Roles = "manager")]
         [HttpDelete("reset")]
         public async Task<ActionResult<bool>> ResetSale()
         {
